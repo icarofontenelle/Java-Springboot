@@ -13,8 +13,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name = "tb_doctor")
+@SQLDelete(sql = "UPDATE tb_doctor SET deleted = true WHERE id=?")
+@Where(clause = "deleted= false")
 public class Doctor  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -26,14 +31,16 @@ public class Doctor  implements Serializable {
 	private String crm;
 	private String phone;
 	private String email;
+	
+	private boolean deleted;
 
 	@ManyToOne
 	@JoinColumn(name = "clinic_id")
 	private Clinic clinic;
-
+	
 	@OneToMany(mappedBy = "doctor")
-	private List<Patient> patients = new ArrayList<>();
-
+	private List<Appointment> Appointments = new ArrayList<>();
+	
 	public Doctor() {
 
 	}
@@ -45,6 +52,7 @@ public class Doctor  implements Serializable {
 		this.phone = phone;
 		this.email = email;
 		this.clinic = clinic;
+		this.deleted = Boolean.FALSE;
 	}
 
 	public Long getId() {
@@ -94,9 +102,16 @@ public class Doctor  implements Serializable {
 	public void setClinic(Clinic clinic) {
 		this.clinic = clinic;
 	}
-
-	public List<Patient> getPatients() {
-		return patients;
+	
+	public boolean isDeleted() {
+		return deleted;
 	}
 	
+	public List<Appointment> getAppointments() {
+		return Appointments;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 }

@@ -11,10 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_clinic")
+@SQLDelete(sql = "UPDATE tb_clinic SET deleted = true WHERE id=?")
+@Where(clause = "deleted= false")
 public class Clinic  implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -27,6 +32,8 @@ public class Clinic  implements Serializable {
 	private String phone;
 	private String email;
 	private String address;
+
+	private boolean deleted;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "clinic")
@@ -43,6 +50,7 @@ public class Clinic  implements Serializable {
 		this.phone = phone;
 		this.email = email;
 		this.address = address;
+		this.deleted = Boolean.FALSE;
 	}
 
 	public Long getId() {
@@ -96,5 +104,12 @@ public class Clinic  implements Serializable {
 	public List<Doctor> getDoctors() {
 		return doctors;
 	}
+	
+	public boolean isDeleted() {
+		return deleted;
+	}
 
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 }

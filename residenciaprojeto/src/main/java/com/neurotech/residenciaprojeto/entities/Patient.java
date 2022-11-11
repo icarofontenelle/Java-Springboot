@@ -1,17 +1,23 @@
 package com.neurotech.residenciaprojeto.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name ="tb_patient")
+@SQLDelete(sql = "UPDATE tb_patient SET deleted = true WHERE id=?")
+@Where(clause = "deleted= false")
 public class Patient  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -26,9 +32,10 @@ public class Patient  implements Serializable {
 	private String phone;
 	private String email;
 	
-	@ManyToOne
-	@JoinColumn(name = "doctor_id")
-	private Doctor doctor;
+	private boolean deleted;
+
+	@OneToMany(mappedBy = "patient")
+	private List<Appointment> Appointments = new ArrayList<>();
 	
 	public Patient() {
 		
@@ -42,6 +49,7 @@ public class Patient  implements Serializable {
 		this.address = address;
 		this.phone = phone;
 		this.email = email;
+		this.deleted = Boolean.FALSE;
 	}
 
 	public Long getId() {
@@ -100,12 +108,16 @@ public class Patient  implements Serializable {
 		this.email = email;
 	}
 
-	public Doctor getDoctor() {
-		return doctor;
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
+	public List<Appointment> getAppointments() {
+		return Appointments;
 	}
 
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 }
