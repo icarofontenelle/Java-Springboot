@@ -39,7 +39,7 @@ public class Doctor  implements Serializable {
 	private Clinic clinic;
 	
 	@OneToMany(mappedBy = "doctor")
-	private List<Appointment> Appointments = new ArrayList<>();
+	private List<Agenda> Agendas = new ArrayList<>();
 	
 	public Doctor() {
 
@@ -106,12 +106,12 @@ public class Doctor  implements Serializable {
 	public boolean isDeleted() {
 		return deleted;
 	}
-	
-	public List<Appointment> getAppointments() {
-		return Appointments;
-	}
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+	
+	public List<Agenda> getAgendas() {
+		return Agendas;
 	}
 }

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -33,7 +34,6 @@ public class Patient  implements Serializable {
 	private String email;
 	
 	private boolean deleted;
-
 	@OneToMany(mappedBy = "patient")
 	private List<Appointment> Appointments = new ArrayList<>();
 	
